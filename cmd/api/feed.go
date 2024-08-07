@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/sikozonpc/social/internal/store"
@@ -23,6 +24,8 @@ func (app *application) getUserFeedHandler(w http.ResponseWriter, r *http.Reques
 		app.badRequestResponse(w, r, err)
 		return
 	}
+
+	log.Println(fq.Search)
 
 	ctx := r.Context()
 
