@@ -8,10 +8,37 @@ services:
       POSTGRES_DB: socialnetwork
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpassword
+    networks:
+      - backend 
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
+  redis:
+    image: redis:6.2-alpine
+    restart: unless-stopped
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    environment:
+    - REDIS_HOST=redis
+    ports:
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      - redis
+    restart:
+      unless-stopped
+  
 volumes:
   db-data:
+
+networks:
+  backend:
+    driver: bridge
