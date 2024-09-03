@@ -8,6 +8,7 @@ import (
 	"github.com/sikozonpc/social/internal/db"
 	"github.com/sikozonpc/social/internal/env"
 	"github.com/sikozonpc/social/internal/mailer"
+	"github.com/sikozonpc/social/internal/ratelimiter"
 	"github.com/sikozonpc/social/internal/store"
 	"github.com/sikozonpc/social/internal/store/cache"
 	"go.uber.org/zap"
@@ -68,6 +69,11 @@ func main() {
 				iss:    "gophersocial",
 			},
 		},
+		rateLimiter: ratelimiter.Config{
+			RequestsPerTimeFrame: env.GetInt("RATELIMITER_REQUESTS_COUNT", 20),
+			TimeFrame:            time.Second * 5,
+			Enabled:              env.GetBool("RATE_LIMITER_ENABLED", true),
+		},
 	}
 
 	// Logger
@@ -97,6 +103,12 @@ func main() {
 		defer rdb.Close()
 	}
 
+	// Rate limiter
+	rateLimiter := ratelimiter.NewFixedWindowLimiter(
+		cfg.rateLimiter.RequestsPerTimeFrame,
+		cfg.rateLimiter.TimeFrame,
+	)
+
 	store := store.NewStorage(db)
 	cacheStorage := cache.NewRedisStorage(rdb)
 
@@ -115,6 +127,7 @@ func main() {
 		logger:        logger,
 		mailer:        mailer,
 		authenticator: jwtAuthenticator,
+		rateLimiter:   rateLimiter,
 	}
 
 	mux := app.mount()
