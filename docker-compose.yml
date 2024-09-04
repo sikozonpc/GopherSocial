@@ -9,9 +9,48 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: adminpassword
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - pqdb-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
+        ## Redis Service   
+  redis:
+    image: redis:6.2-alpine
+    restart: unless-stopped
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --requirepass MDNcVb924a --loglevel warning
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    environment:
+    - REDIS_HOST=redis
+    - REDIS_PASSWORD=MDNcVb924a
+    ports:
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      - redis
+    restart:
+      unless-stopped
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8085:8080
+    container_name: adminer
+    networks:
+      - backend    
+
+      
+networks:
+  backend:
+    driver: bridge
+
 volumes:
-  db-data:
+    pqdb-data:
+    pgadmin:
+    golang:
