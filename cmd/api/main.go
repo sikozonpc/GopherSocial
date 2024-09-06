@@ -80,7 +80,7 @@ func main() {
 	logger := zap.Must(zap.NewProduction()).Sugar()
 	defer logger.Sync()
 
-	// Database
+	// Main Database
 	db, err := db.New(
 		cfg.db.addr,
 		cfg.db.maxOpenConns,
@@ -109,16 +109,18 @@ func main() {
 		cfg.rateLimiter.TimeFrame,
 	)
 
-	store := store.NewStorage(db)
-	cacheStorage := cache.NewRedisStorage(rdb)
-
+	// Mailer
 	mailer := mailer.NewSendgrid(cfg.mail.sendGrid.apiKey, cfg.mail.fromEmail)
 
+	// Authenticator
 	jwtAuthenticator := auth.NewJWTAuthenticator(
 		cfg.auth.token.secret,
 		cfg.auth.token.iss,
 		cfg.auth.token.iss,
 	)
+
+	store := store.NewStorage(db)
+	cacheStorage := cache.NewRedisStorage(rdb)
 
 	app := &application{
 		config:        cfg,
