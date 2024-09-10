@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/sikozonpc/GohperSocial/compare/v1.0.0...v1.1.0) (2024-09-10)
+
+
+### Features
+
+* update api version automatically ([e5c3868](https://github.com/sikozonpc/GohperSocial/commit/e5c38686de35ab33d45d35acccc5cdbf8c46af0a))
+
 ## 1.0.0 (2024-09-10)
 
 
