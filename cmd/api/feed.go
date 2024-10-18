@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/sikozonpc/social/internal/store"
@@ -31,6 +30,8 @@ func (app *application) getUserFeedHandler(w http.ResponseWriter, r *http.Reques
 		Limit:  20,
 		Offset: 0,
 		Sort:   "desc",
+		Tags:  []string{},
+		Search: "",
 	}
 
 	fq, err := fq.Parse(r)
@@ -44,11 +45,11 @@ func (app *application) getUserFeedHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	log.Println(fq.Search)
-
 	ctx := r.Context()
 
-	feed, err := app.store.Posts.GetUserFeed(ctx, int64(341), fq)
+	user := getUserFromContext(r)
+
+	feed, err := app.store.Posts.GetUserFeed(ctx, user.ID, fq)
 	if err != nil {
 		app.internalServerError(w, r, err)
 		return
