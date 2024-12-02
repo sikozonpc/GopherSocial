@@ -59,6 +59,9 @@ func main() {
 			sendGrid: sendGridConfig{
 				apiKey: env.GetString("SENDGRID_API_KEY", ""),
 			},
+			mailTrap: mailTrapConfig{
+				apiKey: env.GetString("MAILTRAP_API_KEY", ""),
+			},
 		},
 		auth: authConfig{
 			basic: basicConfig{
@@ -112,7 +115,11 @@ func main() {
 	)
 
 	// Mailer
-	mailer := mailer.NewSendgrid(cfg.mail.sendGrid.apiKey, cfg.mail.fromEmail)
+	// mailer := mailer.NewSendgrid(cfg.mail.sendGrid.apiKey, cfg.mail.fromEmail)
+	mailtrap, err := mailer.NewMailTrapClient(cfg.mail.mailTrap.apiKey, cfg.mail.fromEmail)
+	if err != nil {
+		logger.Fatal(err)
+	}
 
 	// Authenticator
 	jwtAuthenticator := auth.NewJWTAuthenticator(
@@ -129,7 +136,7 @@ func main() {
 		store:         store,
 		cacheStorage:  cacheStorage,
 		logger:        logger,
-		mailer:        mailer,
+		mailer:        mailtrap,
 		authenticator: jwtAuthenticator,
 		rateLimiter:   rateLimiter,
 	}
