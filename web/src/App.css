@@ -4,3 +4,111 @@
   padding: 2rem;
   text-align: center;
 }
+
+.posts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 1rem;
+}
+
+.post {
+  cursor: pointer;
+  color: #f4f4f4;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #333333;
+}
+
+.post:hover {
+  background-color: #555555;
+}
+
+.post-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: gray;
+}
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.comment {
+  display: flex;
+  color: #f4f4f495;
+  align-items: center;
+  text-align: right;
+  width: 100%;
+}
+
+.comment> :first-child {
+  color: burlywood;
+  margin-right: 5px;
+}
+
+.comment-date {
+  margin-left: 20px;
+  color: gray;
+  font-size: 10px;
+}
+
+.gopher-form {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  background-color: #444444;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 40px;
+}
+
+.gopher-form label {
+  width: 100%;
+}
+
+.gopher-form input {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #444444;
+  background: #333333;
+  width: 90%;
+  justify-content: center;
+}
+
+.gopher-form button {
+  width: 93%;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #333333;
+  background-color: #333333;
+  color: #f4f4f4;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.gopher-form button:hover {
+  background-color: #555555;
+}
+
+.gopher-form textarea {
+  width: 90%;
+  margin-top: 5px;
+  padding: 0.5rem;
+  border-radius: 5px;
+  background: #333333;
+  border: 1px solid #444444;
+}
+
+.label {
+  color: #f4f4f4;
+  margin-bottom: 0.5rem;
+  margin: 0;
+  padding: 0;
+}
